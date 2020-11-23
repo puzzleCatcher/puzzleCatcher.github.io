@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html> 
   <head>
     <title>Processing.JS inside Webpages: Template</title> 

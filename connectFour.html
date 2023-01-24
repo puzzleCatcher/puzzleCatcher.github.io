@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html> 
+  <head>
+    <title>Processing.JS inside Webpages: Template</title> 
+  </head>
+  <body>
+	<!--This draws the canvas on the webpage -->
+    <canvas id="mycanvas"></canvas> 
+  </body>
+ 
+  <!-- Include the processing.js library -->
+  <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+  <script>
+  var programCode = function(processingInstance) {
+    with (processingInstance) {
+        size(600, 850); 
+        frameRate(30);
+        var scene = "HOME";
+        var NUMROWS = 6;
+        var NUMCOLS = 7;
+        var OFF = 0;
+        var ERROR = 1;
+        var DEBUG = 2;
+        var DEBUG_LEVEL = OFF;
+        var pieceSize = 55;
+        var BLANK = 0;
+        var RED = 1;
+        var BLACK = 2;
+        var keys = [];
+        var piecePos = new PVector(3,-1);
+        var printLog = function(level, msg) {
+            if (level<=DEBUG_LEVEL){
+                println(new Date()+msg);
+            }
+        }; 
+
+
+        // Select Feature
+        var selectIconY = 100;
+        var playerNames = ["Human", "Novice", "Newbie", "Medium", "Hard", "Expert"]; 
+        //var playerAvatar = [getImage("space/beetleship"),getImage("avatars/aqualine-seed"),getImage("avatars/leafers-sapling"), getImage("avatars/spunky-sam"), getImage("avatars/robot_female_3"), getImage("creatures/Hopper-Cool")];
+
+        // Default red & black player to human;  represents index of "playerNames" 
+        var redPlayer = 0;
+        var blackPlayer = 0;
+
+        var delayMove = 0;
+        var delayMoveMax = random(20,80);
+
+
+        textFont(createFont("Comic Sans MS"));
+
+        // move  - col, score
+        // getScoredMoves (b)  -- array of moves, scored at 0
+        // getMaxScores (array of moves) --> returns array of highest value
+        // Random -> chooseBestScore (getMaxScores) 
+        // Stop winning moves -- Winning Move +100
+        // stop Losing moves -- Score +90
+        // don't let oppononent win -- score -100
+
+
+
+        var getValidMoves = function(b) {
+        // Returns an Array of moves {col:i, score:0} that are valid
+            var validMoves = [];
+            for (var i = 0; i < NUMCOLS; i++) {
+                if (b.pos[i][0]===BLANK) {
+                    validMoves.push({col:i, score:0});
+                }
+            }
+            return(validMoves);
+        };
+
+
+        var chooseHighestScoredMove = function(v) {
+            // Takes in validMoves array {col, score} and returns the col where the highest score is. If more than 1, it randomly picks
+            var bestColumns = [];
+            var curHighestScore = -1000;
+            for (var i = 0; i < v.length; i ++) {
+                if (v[i].score > curHighestScore) {
+                    curHighestScore = v[i].score;
+                    bestColumns = [];
+                    bestColumns.push(v[i].col);
+                
+                } else if (v[i].score === curHighestScore) {
+                    bestColumns.push(v[i].col);
+                }
+            }
+        
+            var randMove = floor(random(0,bestColumns.length));
+            return bestColumns[randMove]; 
+            
+            
+        };
+
+        var countCenter = function (b, color) {
+            // Counts how many more pieces in the center color has
+            var numCenter = 0;
+            for (var i=0; i<NUMCOLS; i++) {
+                for (var j=0; j<NUMROWS; j++) {
+                    if ((i>=2)&&(i<=4)) {
+                        if (b.pos[i][j]===color) {
+                            numCenter+=3;
+                        } else if (b.pos[i][j]!==BLANK) {
+                            numCenter-=2;
+                        }
+                    } else if ((i===1)||(i===5)) {
+                        if (b.pos[i][j]===color) {
+                            numCenter+=2;
+                        } else if (b.pos[i][j]!==BLANK) {
+                            numCenter-=1;
+                        }
+                    }
+                }
+            }
+            return numCenter;
+        };
+
+        var scoreBlankWinningMoves = function (b, color) {
+            // scores number of the blank winning moves on the board
+            // 20 points + row for color
+            // -10 points - row for opposite color
+            var score = 0;
+            var lastWinningRow = false;
+            var lastWinningRowOpp = false;        
+            
+            for (var i = 0; i < NUMCOLS; i ++) {
+                for (var j = 0; j < NUMROWS; j ++) {
+                    
+                    if (b.pos[i][j] === BLANK) {
+                        if (b.isWinningPosition(i, j, color)) {
+                            score += 20+j;
+                            if (lastWinningRow === true) {
+                                score += 10;
+                                printLog(ERROR,"working i="+i+", j="+j+" color="+color);
+                            }
+                            lastWinningRow = true;
+                            lastWinningRowOpp = false;
+                        } else if (b.isWinningPosition(i, j, b.getOppositeTurn(color))) {
+                            score -= (10+j);
+                            if (lastWinningRowOpp === true) {
+                                score -= 5;
+                            }
+                            lastWinningRow = false;
+                            lastWinningRowOpp = true;
+                        
+                        } else {
+                            lastWinningRow = false;
+                            lastWinningRowOpp = false;
+                        }
+                    
+                    }
+                
+                }
+            
+            }
+            
+            return score;
+        };
+
+        var minimaxEval = function (b, color) {
+            // Static evaluation of board
+            // Check if game is over
+            if (b.gameOver()) {
+                if (b.winner === color) {
+                    return 100;
+                } else {
+                    return -100;
+                }
+            }
+            // if game is not over
+            // count number of more pieces in center of board than 
+            // opponent
+            var score = 0;
+            score = scoreBlankWinningMoves(b, color);
+            if (score!==0) {
+                return score;
+            }
+            
+            // Expert has a complicated algrorithm and the other bots don't
+            if (playerNames[redPlayer] === "Expert" || playerNames[blackPlayer] === "Expert") {
+                return (countCenter(b,color))+(scoreBlankWinningMoves(b, color));         
+            } else {
+                return (countCenter(b,color));    
+            }
+            
+        };
+
+        var minimax = function (b, depth, maximizingPlayer) {
+            var validMoves = getValidMoves(b);
+            
+            var evaluation = 0;
+            if (depth === 0 || b.gameOver()) {
+                if (maximizingPlayer) {
+                    return minimaxEval (b, b.turn);
+                } else {
+                    return minimaxEval (b, b.getOppositeTurn());
+                }
+            
+            }
+            
+            if (maximizingPlayer) {
+                var maxEval = -10000;
+                for (var i = 0; i < validMoves.length; i ++)         {
+                    b.dropPiece(validMoves[i].col);
+                    evaluation = minimax(b,depth-1,false);
+                    printLog(DEBUG, "minimax: col="+validMoves[i].col+" depth="+(depth-1)+" maximizing=false val="+evaluation);
+                    b.undropPiece(validMoves[i].col);
+                    maxEval = max(maxEval,evaluation);
+                    
+                }
+                return maxEval;
+            
+            
+            } else {
+                var minEval = 10000;    
+                for (var i = 0; i < validMoves.length; i ++) {
+                    b.dropPiece(validMoves[i].col);
+                    evaluation = minimax(b,depth-1,true);
+                    printLog(DEBUG, "minimax: col="+validMoves[i].col+" depth="+(depth-1)+" maximizing=true val="+evaluation);
+                    b.undropPiece(validMoves[i].col);
+                    minEval = min(minEval,evaluation);
+                }
+                return minEval;
+            }
+        };
+
+
+        var alphaBeta = function (b, depth, alpha, beta, maximizingPlayer) {
+            var validMoves = getValidMoves(b);
+            
+            var evaluation = 0;
+            if (depth === 0 || b.gameOver()) {
+                if (maximizingPlayer) {
+                    return minimaxEval (b, b.turn);
+                } else {
+                    return minimaxEval (b, b.getOppositeTurn());
+                }
+            
+            }
+            
+            if (maximizingPlayer) {
+                var maxEval = -10000;
+                for (var i = 0; i < validMoves.length; i ++)         {
+                    b.dropPiece(validMoves[i].col);
+                    evaluation = alphaBeta(b,depth-1, alpha, beta, false);
+                    printLog(DEBUG, "minimax: col="+validMoves[i].col+" depth="+(depth-1)+" maximizing=false val="+evaluation);
+                    b.undropPiece(validMoves[i].col);
+                    maxEval = max(maxEval,evaluation);
+                    alpha = max(alpha, evaluation);
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
+                return maxEval;
+            
+            
+            } else {
+                var minEval = 10000;    
+                for (var i = 0; i < validMoves.length; i ++) {
+                    b.dropPiece(validMoves[i].col);
+                    evaluation = alphaBeta(b,depth-1, alpha, beta, true);
+                    printLog(DEBUG, "minimax: col="+validMoves[i].col+" depth="+(depth-1)+" maximizing=true val="+evaluation);
+                    b.undropPiece(validMoves[i].col);
+                    minEval = min(minEval,evaluation);
+                    beta = min(beta, evaluation);
+                    if (beta <= alpha) {
+                        break;
+                    
+                    }
+                }
+                return minEval;
+            }
+        };
+
+
+
+        var checkLosingMove = function(b, i) {
+            
+            //check if dropping piece results in 
+            // opponent winning
+            
+            var result = false;
+            
+            b.dropPiece(i);
+            if (b.isWinningMove(i,b.turn)) {
+                result = true;
+                printLog(DEBUG,i+" Is Losing Move");
+            } else {
+                result = false;
+                printLog(DEBUG,i+" Is not losing");
+            }
+            
+            b.undropPiece(i);  
+            return result;
+        };
+
+
+        var AINoviceMove = function (b) {
+            var scoredMoves = getValidMoves(b);
+            for (var i = 0; i < scoredMoves.length; i ++) {
+                if (b.isWinningMove(scoredMoves[i].col,b.turn)) {
+                    // If winning move, score=100
+                    scoredMoves[i].score = 100;
+                
+                }
+            }
+            return chooseHighestScoredMove(scoredMoves);
+            
+        };
+
+        var AINewbieMove = function (b) {
+            var scoredMoves = getValidMoves(b);
+                for (var i = 0; i < scoredMoves.length; i ++) {
+                    if (b.isWinningMove(scoredMoves[i].col,b.turn)) {
+                        // If winning move, score=100
+                        scoredMoves[i].score = 100;
+                    
+                    } else if (b.isWinningMove(scoredMoves[i].col,b.getOppositeTurn())) {
+                        // If opponent can win, block. 
+                        scoredMoves[i].score = 90;
+                    } else if (checkLosingMove(b,scoredMoves[i].col)) {  
+                        scoredMoves[i].score = -100;     
+                    
+                    }
+                }
+                return chooseHighestScoredMove(scoredMoves);
+        
+        };
+
+        var AIMediumMove = function(b) {
+            var scoredMoves = getValidMoves(b);
+            for (var i = 0; i < scoredMoves.length; i ++) {
+                b.dropPiece(scoredMoves[i].col);
+                scoredMoves[i].score = minimax(b,1,false);
+                printLog(DEBUG,"AIHardMove Column="+scoredMoves[i].col+", score="+scoredMoves[i].score);
+                b.undropPiece(scoredMoves[i].col);
+            }
+            
+            return chooseHighestScoredMove(scoredMoves);
+
+        };
+
+        var AIHardMove = function (b) {
+            var scoredMoves = getValidMoves(b);
+            for (var i = 0; i < scoredMoves.length; i ++) {
+                b.dropPiece(scoredMoves[i].col);
+                scoredMoves[i].score = alphaBeta(b,2,-10000,10000,false);
+                printLog(DEBUG,"AIHardMove Column="+scoredMoves[i].col+", score="+scoredMoves[i].score);
+                b.undropPiece(scoredMoves[i].col);
+            }
+            
+            return chooseHighestScoredMove(scoredMoves);
+
+        };
+
+        var AIExpertMove = function (b) {
+            var scoredMoves = getValidMoves(b);
+            for (var i = 0; i < scoredMoves.length; i ++) {
+                b.dropPiece(scoredMoves[i].col);
+                scoredMoves[i].score = alphaBeta(b,6,-10000,10000,false);
+                printLog(DEBUG,"AIHardMove Column="+scoredMoves[i].col+", score="+scoredMoves[i].score);
+                b.undropPiece(scoredMoves[i].col);
+            }
+            
+            return chooseHighestScoredMove(scoredMoves);
+        
+
+        };
+
+        var dropAIMove = function (b) {
+            /* given a board, returns the column for the AI to move */
+            
+            var playerName = b.getTurnName();
+            if (playerName!=="Human") { // current player is computer
+                    if (!b.gameOver()) {              // Don't play if game is over
+                    
+                            textSize(30);
+                            
+                            text(playerName + " is thinking...",300,550);
+                            delayMove ++;
+                            if (delayMove> delayMoveMax) {
+                                if (playerName === "Novice") {
+                                    b.dropPiece(AINoviceMove(b));
+                                } else if (playerName === "Newbie") {
+                                    b.dropPiece(AINewbieMove(b));
+                                
+                                } else if (playerName === "Medium") {
+                                    b.dropPiece(AIMediumMove(b));
+                                } else if (playerName === "Hard"){
+                                    b.dropPiece(AIHardMove(b));    
+                                
+                                } else if (playerName === "Expert") {
+                                    b.dropPiece(AIExpertMove(b));
+                                
+                                }
+                        
+                            delayMove = 0;
+                            delayMoveMax = random(20,80);
+                            }
+                        }
+                    }
+        };
+
+        var isComputerThinking = function() {
+            if (delayMove > 0) {
+                    return true;
+                
+                }
+            return false;
+        };
+
+
+
+        var Board = function() {
+            this.pos = [[]]; // Two dimensional array pos[col][row]
+            // col 0 = left side of board; row 0 = top of board
+            this.turn = RED;
+            this.winner = BLANK;
+            for (var i = 0; i < NUMCOLS; i ++) {
+                this.pos[i] = new Array(NUMROWS);
+                for (var j = 0; j < NUMROWS; j ++) {
+                    this.pos[i][j] = BLANK;
+                }
+            }
+
+            //printLog(DEBUG, this.pos);
+        };
+
+        Board.prototype.drawPiece = function(i,j,pColor) {
+            if (i>=NUMCOLS){
+                printLog(ERROR,"drawPiece: i must be below "+NUMCOLS);
+            }
+            if (j>=NUMROWS){
+                printLog(ERROR,"drawPiece: j must be below "+NUMROWS);
+            }
+            
+            fill(pColor);
+            ellipse((75*i)+75,(65*j)+135,pieceSize, pieceSize); 
+            
+            
+        };
+
+        Board.prototype.draw = function() {
+            fill(0, 0, 255);
+            rect(300,300,570,400);
+            rect(570,542,30,85); 
+            rect(30,542,30,85);
+            
+            for (var i = 0; i < NUMCOLS; i ++){
+                for (var j = 0; j < NUMROWS; j ++){
+                    var pieceNum = this.pos[i][j];
+                    
+                    if ((this.winner!==BLANK)&&(this.checkFourInRow(i,j))) {
+                        if (this.winner === RED) {
+                        this.drawPiece(i,j, color(random(0,255), 0, 0));
+                        } else if (this.winner === BLACK) {
+                            
+                            this.drawPiece(i,j,color(random(0,100)));
+                        
+                        }
+                    } else {
+                    
+                        if (pieceNum === BLANK) {
+                            this.drawPiece(i, j, color(255, 255, 255));
+                    
+                        } else if(pieceNum === RED){
+                            this.drawPiece(i, j, color(255, 0, 0));
+                                
+                        } else if(pieceNum === BLACK){
+                            fill(0, 0, 0);
+                            this.drawPiece(i, j, color(0, 0, 0));
+                        }
+                    }
+                    
+                }
+                
+            }
+            
+            
+            if (this.winner === BLANK && this.isTie() === false) {
+                if (this.turn === RED) {
+                    textSize(30);
+                    fill(255, 0, 0);
+                    if (this.getTurnName() !== "Human") {
+                        text("It's " + this.getTurnName() + " (Red's) Turn",300,23);
+                    } else {
+                        text("It's Red's Turn",300,23);
+                    
+                    }
+                } else if(this.turn === BLACK) {
+                    textSize(30);
+                    fill(0);
+                    if (this.getTurnName() !== "Human") {
+                        text("It's " + this.getTurnName() + " (Black's) Turn",300,23);
+                    } else {
+                        text("It's Black's Turn",300,23);
+                    
+                    }
+                
+                }
+            }
+            
+            if (this.winner === BLACK) {
+                fill(0, 150);
+                rect(300,300,600,600);
+                fill(255);
+                textSize(100);
+                text("Black Wins!",300,300);
+                
+
+            } else if (this.winner === RED) {
+                fill(255, 0, 0, 150);
+                rect(300,300,600,600);
+                fill(255);
+                textSize(100);
+                text("Red Wins!",300,300);
+            
+            } else if (this.isTie() === true) {
+                fill(255, 0, 0, 150);
+                rect(150,300,300,600);
+                fill(0,150);
+                rect(450,300,300,600);
+                fill(255);
+                textSize(100);
+                text("It's a",300,250);
+                text("TIE!",300,350);
+            
+            }
+            
+                textSize(30);
+            if (this.winner !== BLANK || this.isTie() === true) {
+                text("Press 'p' to play again",300,415);
+                text("Press 'm' to change modes",300,465);
+            }
+            
+            this.dropShadow();
+        };
+
+        Board.prototype.moveTopPiece = function () {
+            if (!isComputerThinking()) {
+                if (keys[RIGHT] && piecePos.x < 6){
+                    piecePos.x += 1;
+                } else if(keys[LEFT] && piecePos.x > 0){
+                    piecePos.x -= 1;
+                
+                } else if(keys[DOWN]) {
+                    this.dropPiece(piecePos.x);
+                }
+            }  
+
+        };
+
+
+
+        Board.prototype.dropPiece = function(col) {
+                // Drops piece into board
+                var j = this.getNextBlank(col);
+                
+                if (this.pos[col][0] === BLANK){
+                    this.pos[col][j] = this.turn;
+                    if (this.checkFourInRow(col, j)) {
+                        this.winner = this.turn;
+                        //printLog(DEBUG,"Winner = "+this.turn);
+                        
+                    }
+                    this.turn = this.getOppositeTurn();
+                
+                } 
+                
+        };
+            
+        Board.prototype.undropPiece = function (col) {
+            this.pos[col][this.getNextBlank(col)+1] = BLANK;
+            this.turn = this.getOppositeTurn();
+            this.winner = BLANK;
+            
+        };
+
+        Board.prototype.gameOver = function () {
+            if (this.winner !== BLANK || this.isTie() === true) {
+                return true;
+            }
+            
+            return false;
+
+        };
+
+        Board.prototype.getTurnColor = function() {
+        if (this.turn === RED){
+            return color(255, 0, 0);
+        } else if (this.turn === BLACK){
+            return color(0);
+        
+        }
+        };
+
+        Board.prototype.getOppositeTurn = function() {
+        if (this.turn === RED) {
+                return BLACK;
+        
+        } else if (this.turn === BLACK) {
+                return RED;
+        
+        }
+
+        };
+
+        Board.prototype.getTurnName = function() {
+            var playerName = "";
+            if (this.turn === RED) {
+                playerName = playerNames[redPlayer];
+            
+            } else if (this.turn === BLACK) {
+                playerName = playerNames[blackPlayer];
+            }  
+            
+            return playerName;
+
+        };
+
+        Board.prototype.countDirection = function(pPosI, pPosJ, pColor, pDir){
+            /*
+            Function counts number of pieces in specific direction of a specific color, starting from a specific positon on the board. This function is exclusive; it doesn't count the starting postion
+            
+            */
+            
+            var count = 0;
+            var i = pPosI;
+            var j = pPosJ;
+            var iInc = 0;
+            var jInc = 0;
+            if (pDir === "W" || pDir === "SW" || pDir === "NW") {
+                iInc = -1;
+            }
+            if (pDir === "E" || pDir === "NE" || pDir === "SE") {
+                iInc = 1;
+
+            } 
+            if (pDir === "S" || pDir === "SE" || pDir === "SW") {
+                jInc = 1;
+            } 
+            if (pDir === "N" || pDir === "NE" || pDir === "NW") {
+                jInc = -1;
+            }
+            
+            i += iInc;
+            j += jInc;
+            
+        if ((iInc===0)&&(jInc===0)) {
+            return 0;
+        }
+            
+            while ((i>=0) && (i<this.pos.length) && (j >= 0) && (j <this.pos[i].length) && (this.pos[i][j] === pColor)) {
+                count++;
+                i += iInc;
+                j += jInc;
+            }
+        return count;  
+        
+
+        };
+
+        Board.prototype.checkFourInRow = function(i,j) {
+            /* Checks whether piece at position (i,j) 
+            completes at least four in a row (inclusive)*/
+            if (this.pos[i][j] !== BLANK && this.countDirection(i,j,this.pos[i][j],"E")+this.countDirection(i,j,this.pos[i][j],"W") >= 3) {
+                return true;
+                
+            } else if (this.pos[i][j] !== BLANK && this.countDirection(i,j,this.pos[i][j],"N")+this.countDirection(i,j,this.pos[i][j],"S") >= 3) {
+                return true;
+                
+            } else if (this.pos[i][j] !== BLANK && this.countDirection(i,j,this.pos[i][j],"SW")+this.countDirection(i,j,this.pos[i][j],"NE") >= 3) {
+                return true;
+                
+            }
+            else if (this.pos[i][j] !== BLANK && this.countDirection(i,j,this.pos[i][j],"NW")+this.countDirection(i,j,this.pos[i][j],"SE") >= 3) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        Board.prototype.isWinningMove = function (i, pColor) {
+            /* checks whether dropping piece at i would result in 
+            Player 'pColor' completing four in a row */
+            var j = this.getNextBlank(i);
+            return this.isWinningPosition(i, j, pColor);
+            
+        };
+
+        Board.prototype.isWinningPosition = function(i, j, pColor) {
+            if (j >= 0) { // If there are three in row on complete top don't crash
+                if (this.countDirection(i,j,pColor,"E")+this.countDirection(i,j,pColor,"W") >= 3) {
+                    return true;
+                    
+                } else if (this.countDirection(i,j,pColor,"N")+this.countDirection(i,j,pColor,"S") >= 3) {
+                    return true;
+                    
+                } else if (this.countDirection(i,j,pColor,"SW")+this.countDirection(i,j,pColor,"NE") >= 3) {
+                    return true;
+                    
+                }
+                else if (this.countDirection(i,j,pColor,"NW")+this.countDirection(i,j,pColor,"SE") >= 3) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return false;    
+
+        };
+
+        Board.prototype.isTie = function() {
+            var blankPieceCount = 0;
+            for (var i = 0; i < NUMCOLS; i ++) {
+                if (this.pos[i][0] === BLANK) {
+                        blankPieceCount ++;
+                }
+            }
+            
+            if (blankPieceCount === 0) {
+                return true;
+            }
+            return false;
+            
+
+        };
+
+
+        Board.prototype.resetGame = function () {
+            if (this.winner !== BLANK) {
+                if (this.winner === RED) {
+                    this.turn = BLACK;
+                } else if (this.winner === BLACK) {
+                    this.turn = RED;
+                }
+            }
+            for (var i = 0; i < NUMCOLS; i ++) {
+                for (var j = 0; j < NUMROWS; j ++) {
+                    this.pos[i][j] = BLANK;
+                }
+            }
+            this.winner = BLANK;
+            piecePos.x = 3;
+        };
+        Board.prototype.getNextBlank = function (i) {
+        var j = -1;
+                while (this.pos[i][j+1] === BLANK){
+                    j++;
+                }
+            return j;
+
+        };
+
+        Board.prototype.dropShadow = function() {
+            if (!this.gameOver()) {
+                if (this.turn === RED) {
+                    this.drawPiece(piecePos.x, this.getNextBlank(piecePos.x), color(255, 0, 0, 50));    
+                } else if (this.turn === BLACK) {
+                    this.drawPiece(piecePos.x, this.getNextBlank(piecePos.x), color(0, 50)); 
+                
+                }
+            }
+
+        };
+
+        var aboutBot = function(img, bio, x, y) {
+            textAlign(CENTER,CENTER);
+            fill(0);
+            image(img,x,y,90,90);
+            textAlign(CORNER);
+            textSize(20);
+            text(bio,x+56,y-15);    
+
+        };
+
+        var howTo = function () {
+            textAlign(CENTER,CENTER);
+            
+            background(255);
+            textSize(45);
+            text("Meet the Bots",300,50);
+            //aboutBot(playerAvatar[1],"Aqualine is a beginner at Connect Four.\nShe is still learning the basics, but she\nknows how to win the game.",50,145);
+            //aboutBot(playerAvatar[2],"Leafers is a little bit more experienced\nthan Aqualine. He knows how to win, but\nhe also knows how to block opponents.",50,245);
+            //aboutBot(playerAvatar[3],"Spunky Sam is smarter, and starts to\nthink a little bit ahead. He is able to\nbeat both Leafers and Aqualine.",50,345);
+            //aboutBot(playerAvatar[4],"Amelia has a complicated algorithm,\nand thinks 2 moves ahead. She can\ncreate winning positions.",50,445);
+            //aboutBot(playerAvatar[5],"Hopper can think three moves ahead\nwith a complicated algorithm. He is\nable to beat Amelia.",50,545);   
+
+        };
+
+        var b = new Board();
+        noStroke();
+        textAlign(CENTER, CENTER);
+        rectMode(CENTER);
+        imageMode(CENTER);
+
+
+
+
+        draw = function() {
+        
+            if (scene === "HOME") {
+                background(255, 255, 255);
+                textSize(100);
+                fill(87, 87, 87);
+                ellipse(300,248,171,20);
+                fill(0);
+                text("Connect 4",300,100);
+                fill(255, 0, 0);
+                ellipse(260,198,100,100);
+                fill(0);
+                ellipse(340,199,100,100);
+                textSize(20);
+                text("Press 'p' to play",300,300);
+                text("Press 'h' for how to",300,330);
+                if (keys[80]) {
+                    scene = "MODES";
+                }
+                
+                if (keys[72]) {
+                    scene = "HOW TO";
+                }
+                
+            
+            } else if (scene === "HOW TO") {
+                howTo();
+                
+                
+                
+                
+            } else if (scene === "MODES") {
+            
+                background(255);
+                fill(0);
+                textSize(30);
+                text("Modes",55,30);
+                fill(255, 0, 0);
+                text("Red: ",50,115);
+                fill(0);
+                text("Black:",50,215);
+                textSize(25);
+                fill(255, 0, 0);
+                text(playerNames[redPlayer],150,115);
+                fill(0);
+                text(playerNames[blackPlayer],150,215);
+                triangle(300,selectIconY,278,selectIconY+14,300,selectIconY+28);
+                
+                if (playerNames[redPlayer] !== "Human" && playerNames[blackPlayer] !== "Human") {
+                    text("See " + playerNames[redPlayer] + " and " + playerNames[blackPlayer] + " battle in Connect Four!",300,490);
+                }
+                fill(255, 0, 0);
+                text("Red always goes first in the first game.",300,530);
+                fill(0);
+                text("Press key 'p' to start game.",300,570);
+                
+                
+                    
+                
+                //image(playerAvatar[redPlayer],230,115,65,65);
+                //image(playerAvatar[blackPlayer],230,215,65,65);
+                
+                
+            } else if (scene === "PLAY") {
+                background(255, 255, 255);
+                b.draw();
+                if (!b.gameOver()) {
+                    b.drawPiece(piecePos.x,piecePos.y,b.getTurnColor());
+                }
+                
+                dropAIMove(b);
+                
+            }
+            
+        };
+
+        keyPressed = function() {
+            keys[keyCode] = true;
+            
+            if (scene === "PLAY") {
+                if (!b.gameOver()) {
+                    b.moveTopPiece();
+                } else if (b.gameOver()) {
+                    // Plays Again and resets game
+                    if (keys[80]) {
+                        b.resetGame();
+                    
+                    } else if (keys[77]) {
+                        scene = "MODES";
+                        
+                    
+                    }
+                    
+                
+                }
+            } else if (scene === "MODES") {
+                if (selectIconY === 100) {
+                    // Down Arrow
+                    if (keys[DOWN]) {
+                        selectIconY +=100;
+                    }
+                    
+                    // Left Arrow
+                    if (redPlayer === 0 && keys[LEFT]) {
+                        redPlayer = playerNames.length;
+                    } 
+                    if (keys[LEFT]) {
+                        redPlayer --;
+                    }
+                    
+                    // Right Arrow
+                    if (keys[RIGHT]) {
+                        redPlayer ++;
+                    }
+                    if (redPlayer === playerNames.length && keys[RIGHT]) {
+                        redPlayer = 0;
+                    } 
+                    
+                    
+                } else if (selectIconY === 200) {
+                    // Up Arrow
+                    if (keys[UP]) {
+                        selectIconY -= 100;
+                    }
+                    
+                    // Left Arrow
+                    if (blackPlayer === 0 && keys[LEFT]) {
+                        blackPlayer = playerNames.length;
+                    } 
+                    if (keys[LEFT]) {
+                        blackPlayer --;
+                    }
+                    
+                    // Right Arrow
+                    if (keys[RIGHT]) {
+                        blackPlayer ++;
+                    }
+                    if (blackPlayer === playerNames.length && keys[RIGHT]) {
+                        blackPlayer = 0;
+                    } 
+                    
+                }
+                
+                if (keys[80]) {
+                    b.resetGame();
+                    scene = "PLAY";
+                }
+            
+            }
+        };
+        keyReleased = function() {
+            keys[keyCode] = false;
+        };
+
+    }};
+
+  // Get the canvas that ProcessingJS will use
+  var canvas = document.getElementById("mycanvas"); 
+  // Pass the function to ProcessingJS constructor
+  var processingInstance = new Processing(canvas, programCode); 
+  </script>
+</html>

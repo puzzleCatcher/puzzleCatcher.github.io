@@ -1,0 +1,42 @@
+body {
+    text-align: center;
+}
+
+h1 {
+    color:blue;
+    font-size:50px;
+}
+
+.green {
+    color:green;
+}
+
+#link { 
+    font-size:25px
+}
+
+h1.green {
+    color:green;
+    font-size:75px;
+}
+
+div > span {
+    color:red;
+    background-color:rgb(65, 149, 214);
+    margin-bottom: 10px;
+}
+
+div a {
+    color:green;
+}
+
+.padding {
+    background-color: blue;
+    padding: 10px;
+}
+
+@media (min-width: 1200px) {
+    div {
+        width:80%
+    } 
+}

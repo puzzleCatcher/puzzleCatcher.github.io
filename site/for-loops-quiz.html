@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Choice Quiz</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Jacquard+12+Charted&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+   
+
+    <title>For Loops Quiz</title>
+
+   
+</head>
+<div class="container mt-5">
+    <h1>For Loops Quiz</h1>
+    <form id="for-loops-quiz">
+      <div class="form-group">
+        <label for="question1">Question 1: What is 2 + 2?</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="question1" id="q1a1" value="1">
+          <label class="form-check-label" for="q1a1">
+            3
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="question1" id="q1a2" value="2">
+          <label class="form-check-label" for="q1a2">
+            4
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="question1" id="q1a3" value="3">
+          <label class="form-check-label" for="q1a3">
+            5
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="question1" id="q1a4" value="4">
+          <label class="form-check-label" for="q1a4">
+            6
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="question2">Question 2: What is the capital of France?</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="question2" id="q2a1" value="1">
+          <label class="form-check-label" for="q2a1">
+            London
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="question2" id="q2a2" value="2">
+          <label class="form-check-label" for="q2a2">
+            Paris
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="question2" id="q2a3" value="3">
+          <label class="form-check-label" for="q2a3">
+            Berlin
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="question2" id="q2a4" value="4">
+          <label class="form-check-label" for="q2a4">
+            Madrid
+          </label>
+        </div>
+      </div>
+      <!-- Add more questions here -->
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+  $(document).ready(function() {
+    $('#for-loops-quiz').submit(function(e) {
+      e.preventDefault();
+      let score = 0;
+      $(this).find('input[type="radio"]:checked').each(function() {
+        const selectedAnswer = $(this).val();
+        const correctAnswer = $(this).closest('.form-group').find('input[type="radio"][value="2"]').val();
+        if (selectedAnswer === correctAnswer) {
+          score++;
+        }
+      });
+      alert(`You scored ${score}/${$(this).find('input[type="radio"]').length / 4}`);
+    });
+  });
+  </script>
+
+</body>
+</html>

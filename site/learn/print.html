@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Jacquard+12+Charted&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Print Statements</title>
+</head>
+
+<body>
+
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(function() {
+          $('#header').load('../header.html');
+          $('#footer').load('../footer.html');
+        });
+    </script>
+    
+
+    <div id="header"></div>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Print Statements</h1>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="btn-group btn-group-toggle btn-block mb-3" role="group" aria-label="Select language">
+                    <button type="button" class="btn btn-outline-primary active" id="printJavaBtn">Java</button>
+                    <button type="button" class="btn btn-outline-primary" id="printPythonBtn">Python</button>
+                </div>
+
+                <p>The <code>print()</code> function is used to display output text. It is commonly used to print
+                    strings and variables, but is also very helpful for debugging.</p>  
+                    
+                
+                
+
+                <div class="card mt-0">
+                    <div class="card-body" id="printExample1">
+                        <h5 class="card-title">Java Example</h5>
+                        <pre><code>System.out.println("Hello, world!");</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello, world!</code></p>
+                    </div>
+                </div>
+                
+                
+
+                <p class="mt-5">You can attach variables to print statements as well:</p>
+                <div class="card">
+                    <div class="card-body" id="printExample2">
+                        <h5 class="card-title">Example</h5>
+                        <pre><code>name = "Vikram";<br>System.out.println("Hello, " + name + "!");</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello, Vikram!</code></p>
+                    </div>
+                </div>
+
+                <div id="printJava">
+                    <!-- <h3 class="mt-5">Java Exclusives</h3> -->
+                    <p class="mt-5">In Java, there is a difference between <code>System.out.print()</code> and <code>System.out.println()</code>. Here is an example:</p>
+                    <div class="card">
+                        <div class="card-body" id="printExample2">
+                            <h5 class="card-title">Example</h5>
+                            <pre><code>System.out.println("Hello");<br>System.out.print("World, ");<br>System.out.print("this is Vikram!");</code></pre>
+                            <h6>Output</h6>
+                            <p class="card-text"><code>Hello<br>World, this is Vikram!</code></p>
+                        </div>
+                    </div>
+                    <p class="mt-3"><code>System.out.println()</code> prints a string and moves to a new line, whereas <code>System.out.print()</code> stays on the same line.</p>
+                </div>
+
+                
+                <!-- <p>Additionally, you can format output using <code>%</code> or <code>.format()</code>:</p>
+                <pre><code>age = 30
+print("I am %d years old." % age)
+
+name = "Bob"
+age = 25
+print("My name is {} and I am {} years old.".format(name, age))</code></pre> -->
+                <p class="mt-4">These are some basic examples of using print statements. To learn more, view the resources on the <b>Learn</b> page.</p>
+            </div>
+
+            <script>
+                const printExample1 = document.getElementById("printExample1")
+                const printExample2 = document.getElementById("printExample2")
+                const javaExample = document.getElementById("printJava")
+
+                document.getElementById("printJavaBtn").addEventListener("click", function() {
+                    printExample1.innerHTML = `
+                        <h5 class="card-title">Java Example</h5>
+                        <pre><code>System.out.println("Hello world!");</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello world!</code></p>`;
+
+                    printExample2.innerHTML = `
+                        <h5 class="card-title">Java Example</h5>
+                        <pre><code>String name = "Vikram"<br>System.out.println("Hello, " + name + "!")</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello, Vikram!</code></p>  
+                    `
+
+                    javaExample.style.display = "block";
+                    document.getElementById("printJavaBtn").classList.add("active");
+                    document.getElementById("printPythonBtn").classList.remove("active");
+                });
+            
+                document.getElementById("printPythonBtn").addEventListener("click", function() {
+                    printExample1.innerHTML = `
+                        <h5 class="card-title">Python Example</h5>
+                        <pre><code>print("Hello world!")</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello world!</code></p>`;
+
+                    printExample2.innerHTML = `
+                        <h5 class="card-title">Python Example</h5>
+                        <pre><code>name = "Vikram"<br>print("Hello, " + name + "!")</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello, Vikram!</code></p>  
+                    `
+
+                    javaExample.style.display = "none";
+                    document.getElementById("printJavaBtn").classList.remove("active");
+                    document.getElementById("printPythonBtn").classList.add("active");
+                });
+            </script>
+            
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    
+</body>
+
+</html>

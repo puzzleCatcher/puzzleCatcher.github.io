@@ -1,0 +1,89 @@
+.fira-code-font {
+    font-family: "Fira Code", monospace;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+body {
+    font-size: 16px;
+    color: #fff;
+    background-color:white;
+    font-family: "Fira Code", system-ui;
+}
+/* 
+#logo-img {
+    background: url('../images/canoe.jpg') no-repeat;
+    width: 150px;
+    height: 150px;
+    margin: 0px 0px 0px 0px;
+} */
+
+
+/* Footer */
+footer {
+   /* position: fixed;*/
+    height: 100px;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Home page / Nav bars */
+.navbar-expand-lg  {
+    background-color: #004766;
+    padding: 20px;
+    font-size: 30px;
+    
+}
+
+.nav-item {
+    margin-left: 20px;
+}
+
+.nav-pills .nav-item { 
+    padding: 50px
+}
+
+.jumbotron {
+    color:black;
+    background-color:#b3c5cc;
+    border-radius: 0;
+    padding: 150px;
+    margin-bottom: 0px;
+}
+
+.row {
+    color:black;
+}
+
+.main-footer {
+    background-color: #004766;
+    color:white;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.mt-5 {
+    color:black;
+}
+
+/* Learn */
+
+#learn-boxes {
+    color:black;
+    padding: 20px;
+
+}
+
+#learn-boxes h1 {
+    margin-top: 40px;
+}
+
+.btn-primary {
+    background-color:#004766;
+}
+
+
+/* Definitions */
+
+

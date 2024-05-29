@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/style.css">
-    <title>Document</title>
+    <title>Variables</title>
 </head>
 
 <body>
@@ -21,12 +21,138 @@
 
     <script>
         $(function() {
-          $('#header').load('../header.html');
-          $('#footer').load('../footer.html');
+            $('#header').load('../header.html');
+            $('#footer').load('../footer.html');
         });
     </script>
-</body>
     <div id="header"></div>
+    <div class="container mt-5">
+        <h1 class="mb-4">Variables</h1>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="btn-group btn-group-toggle btn-block mb-3" role="group" aria-label="Select language">
+                    <button type="button" class="btn btn-outline-primary active" id="javaBtn">Java</button>
+                    <button type="button" class="btn btn-outline-primary" id="pythonBtn">Python</button>
+                </div>
+
+                <p>Variables are fundamental to programming in both Java and Python. They act as containers for storing data values, such as integers, decimals, or strings.</p>
+                <p>Java and Python have different syntaxes when creating variables. In Java, you need to declare a specific type depending on what you want the variable to store.</p>
+                
+
+                
+
+                <div id="javaVariables">
+                    <h5 class="mt-5">Java Variables</h5>
+                    <p>Here is an example showcasing how to define variables using different types in Java.</p>
+                    <p>In Java, variables must be declared with a specific data type:</p>
+                    <ul>
+                        <li><code>int</code> for integers (whole numbers)</li>
+                        <li><code>double</code> for numbers with decimals</li>
+                        <li><code>char</code> for single characters</li>
+                        <li><code>String</code> for multiple characters (words or sentences)</li>
+                        <li><code>boolean</code> for true/false values</li>
+                    </ul>
+
+                    <div class="card mt-0 mb-3">
+                        <div class="card-body" id="variableExample">
+                            <h5 class="card-title">Java Example</h5>
+                            <pre><code>// The syntax to create a variable in Java is [type] [name] = [value];<br>char letter = 'W';<br>String word = "Word";<br>double dec = 0.2;<br>int num = 2;<br>boolean bool = true;</code></pre>
+                            <h6 class="mb-4">Output</h6>
     
+                        </div>
+                    </div>
+                    <p>Variables can also be used in mathematical expressions:</p>
+                    <div class="card mt-0 mb-3">
+                        <div class="card-body" id="variableExample">
+                            <h5 class="card-title">Java Example</h5>
+                            <pre><code>int x = 5;<br>int y = 3;<br>int sum = x + y;<br>System.out.println("The sum is: " + sum);</code></pre>
+                            <h6 class="mb-1">Output</h6>
+                            <code>The sum is: 8</code>
+
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div id="pythonVariables" style="display:none;">
+                    <h5 class="mt-5">Python Variables</h5>
+                    <p>In Python, variables do not need to be declared with a specific data type. The type is inferred at runtime:</p>
+                    <div class="card mt-0 mb-3">
+                        <div class="card-body" id="variableExample">
+                            <h5 class="card-title">Python Example</h5>
+                            <pre><code># The syntax to create a variable in Python is [name] = [value]<br>x = 5<br>y = 3<br>sum = x + y<br>print("The sum is:", sum)</code></pre>
+                            <h6 class="mb-4">Output</h6>
+                            <p class="card-text"><code>The sum is: 8</code></p>
+                        </div>
+                    </div>
+                    <p>Python allows you to change the type of a variable by assigning a new value:</p>
+                    <div class="card mt-0 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Example</h5>
+                            <pre><code>x = 5<br>x = "five"<br>print("x is now:", x)</code></pre>
+                            <h6>Output</h6>
+                            <p class="card-text"><code>x is now: five</code></p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="mt-3">There are a few other data types, but these are some of the most common ones. As you can see, there was no output because we are only defining variables, not calling them.</p>
+
+                <p class="mt-5">You can attach variables to print statements as well:</p>
+                <div id="javaPrintExample" class="card mt-0 mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Java Example</h5>
+                        <pre><code>String name = "Vikram";<br>System.out.println("Hello, " + name + "!");</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello, Vikram!</code></p>
+                    </div>
+                </div>
+
+                <div id="pythonPrintExample" class="card mt-0 mb-3" style="display:none;">
+                    <div class="card-body">
+                        <h5 class="card-title">Python Example</h5>
+                        <pre><code>name = "Vikram"<br>print("Hello, " + name + "!")</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello, Vikram!</code></p>
+                    </div>
+                </div>
+
+                
+
+                <p class="mt-4">These are some basic examples of using variables. To learn more, view the resources on the <b>Learn</b> page.</p>
+            </div>
+        </div>
+    </div>
     <div id="footer"></div>
+
+    <script>
+        const variableExample = document.getElementById("variableExample");
+        const printExample = document.getElementById("printExample");
+        const javaVariables = document.getElementById("javaVariables");
+        const pythonVariables = document.getElementById("pythonVariables");
+
+        document.getElementById("javaBtn").addEventListener("click", function() {
+            javaVariables.style.display = "block";
+            pythonVariables.style.display = "none";
+
+            document.getElementById("javaPrintExample").style.display = "block";
+            document.getElementById("pythonPrintExample").style.display = "none";
+            document.getElementById("javaBtn").classList.add("active");
+            document.getElementById("pythonBtn").classList.remove("active");
+        });
+
+        document.getElementById("pythonBtn").addEventListener("click", function() {
+
+            javaVariables.style.display = "none";
+            pythonVariables.style.display = "block";
+            document.getElementById("javaPrintExample").style.display = "none";
+            document.getElementById("pythonPrintExample").style.display = "block";
+            document.getElementById("javaBtn").classList.remove("active");
+            document.getElementById("pythonBtn").classList.add("active");
+        });
+
+        
+    </script>
+</body>
+
 </html>

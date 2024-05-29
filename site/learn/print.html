@@ -44,8 +44,8 @@
                 
                 
 
-                <div class="card mt-0">
-                    <div class="card-body" id="printExample1">
+                <div id="printJava" class="card mt-0">
+                    <div class="card-body">
                         <h5 class="card-title">Java Example</h5>
                         <pre><code>System.out.println("Hello, world!");</code></pre>
                         <h6>Output</h6>
@@ -55,18 +55,24 @@
                 
                 
 
-                <p class="mt-5">You can attach variables to print statements as well:</p>
-                <div class="card">
-                    <div class="card-body" id="printExample2">
-                        <h5 class="card-title">Example</h5>
-                        <pre><code>name = "Vikram";<br>System.out.println("Hello, " + name + "!");</code></pre>
+                <div id="printPython" class="card mt-3" style="display:none;">
+                    <div class="card-body">
+                        <h5 class="card-title">Python Example</h5>
+                        <pre><code>print("Hello world!")</code></pre>
                         <h6>Output</h6>
-                        <p class="card-text"><code>Hello, Vikram!</code></p>
+                        <p class="card-text"><code>Hello world!</code></p>
                     </div>
                 </div>
 
-                <div id="printJava">
-                    <!-- <h3 class="mt-5">Java Exclusives</h3> -->
+                <p class="mt-3">You can attach variables to print statements as well:</p>
+                <div id="printJava2">
+                    <div class="card card-body">
+                        <h5 class="card-title">Example</h5>
+                        <pre><code>String name = "Vikram";<br>System.out.println("Hello, " + name + "!");</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello, Vikram!</code></p>
+                    </div>
+
                     <p class="mt-5">In Java, there is a difference between <code>System.out.print()</code> and <code>System.out.println()</code>. Here is an example:</p>
                     <div class="card">
                         <div class="card-body" id="printExample2">
@@ -77,6 +83,15 @@
                         </div>
                     </div>
                     <p class="mt-3"><code>System.out.println()</code> prints a string and moves to a new line, whereas <code>System.out.print()</code> stays on the same line.</p>
+                </div>
+
+                <div id="printPython2" class="card mt-3" style="display:none;">
+                    <div class="card-body">
+                        <h5 class="card-title">Python Example</h5>
+                        <pre><code>name = "Vikram"<br>print("Hello, " + name + "!")</code></pre>
+                        <h6>Output</h6>
+                        <p class="card-text"><code>Hello, Vikram!</code></p>
+                    </div>
                 </div>
 
                 
@@ -91,44 +106,20 @@ print("My name is {} and I am {} years old.".format(name, age))</code></pre> -->
             </div>
 
             <script>
-                const printExample1 = document.getElementById("printExample1")
-                const printExample2 = document.getElementById("printExample2")
-                const javaExample = document.getElementById("printJava")
-
                 document.getElementById("printJavaBtn").addEventListener("click", function() {
-                    printExample1.innerHTML = `
-                        <h5 class="card-title">Java Example</h5>
-                        <pre><code>System.out.println("Hello world!");</code></pre>
-                        <h6>Output</h6>
-                        <p class="card-text"><code>Hello world!</code></p>`;
-
-                    printExample2.innerHTML = `
-                        <h5 class="card-title">Java Example</h5>
-                        <pre><code>String name = "Vikram"<br>System.out.println("Hello, " + name + "!")</code></pre>
-                        <h6>Output</h6>
-                        <p class="card-text"><code>Hello, Vikram!</code></p>  
-                    `
-
-                    javaExample.style.display = "block";
+                    document.getElementById("printJava").style.display = "block";
+                    document.getElementById("printJava2").style.display = "block";
+                    document.getElementById("printPython").style.display = "none";
+                    document.getElementById("printPython2").style.display = "none";
                     document.getElementById("printJavaBtn").classList.add("active");
                     document.getElementById("printPythonBtn").classList.remove("active");
                 });
-            
+
                 document.getElementById("printPythonBtn").addEventListener("click", function() {
-                    printExample1.innerHTML = `
-                        <h5 class="card-title">Python Example</h5>
-                        <pre><code>print("Hello world!")</code></pre>
-                        <h6>Output</h6>
-                        <p class="card-text"><code>Hello world!</code></p>`;
-
-                    printExample2.innerHTML = `
-                        <h5 class="card-title">Python Example</h5>
-                        <pre><code>name = "Vikram"<br>print("Hello, " + name + "!")</code></pre>
-                        <h6>Output</h6>
-                        <p class="card-text"><code>Hello, Vikram!</code></p>  
-                    `
-
-                    javaExample.style.display = "none";
+                    document.getElementById("printJava").style.display = "none";
+                    document.getElementById("printJava2").style.display = "none";
+                    document.getElementById("printPython").style.display = "block";
+                    document.getElementById("printPython2").style.display = "block";
                     document.getElementById("printJavaBtn").classList.remove("active");
                     document.getElementById("printPythonBtn").classList.add("active");
                 });

@@ -83,6 +83,18 @@ footer {
     background-color:#004766;
 }
 
+/* Slider */
+.slider-text {
+    color: red;
+}
+
+/* Code */
+.code-block {
+    color: black; /* Default text color */
+}
+.code-block .keyword {
+    color: #f92672;
+}
 
 /* Definitions */
 

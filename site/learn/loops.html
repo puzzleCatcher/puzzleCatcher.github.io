@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Jacquard+12+Charted&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>For Loops</title>
+</head>
+
+<body>
+
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(function() {
+          $('#header').load('../header.html');
+          $('#footer').load('../footer.html');
+        });
+    </script>
+    
+
+    <div id="header"></div>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Loops</h1>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="btn-group btn-group-toggle btn-block mb-3" role="group" aria-label="Select language">
+                    <button type="button" class="btn btn-outline-primary active" id="loopsJavaBtn">Java</button>
+                    <button type="button" class="btn btn-outline-primary" id="loopsPythonBtn">Python</button>
+                </div>
+
+                <p>Loops are a great way to run a section of code more than once. There are two main types of loops, <code>for</code> loops and <code>while</code> loops.</p>
+                <p>Here is an example of a simple <code>for</code> loop:</p>
+
+                <div class="card mt-0">
+                    <div class="card-body" id="printExample1">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title">Java Example</h5>
+                                <pre><code id="forExample">for (int i = 0; i &lt; <span class="slider-text" id="sliderText1">1</span>; i++) {<br>   System.out.println("Hello! " + i);<br>}</code></pre>
+                                <h6>Output</h6>
+                                <p class="card-text output-text" id="outputText1">Hello! 0</p>
+                            </div>
+                            <div class="col">
+                                <input type="range" class="form-range" min="1" max="5" value="1" id="rangeInput1">
+                                <span>i &lt; </span>
+                                <span class="result slider-text" id="result1">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="mt-4">As seen above, the variable <code>i</code> is a value that increments until a certain limit, which is when the loop stops.</p>
+                <p class="mt-3">Similar to <code>for</code> loops, <code>while</code> loops can also be used to run code multiple times.</p>
+
+                <div class="card mt-0 mb-3">
+                    <div class="card-body" id="printExample2">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title">Java Example</h5>
+                                <pre><code id="whileExample">int i = 0;<br>while (i &lt; <span class="slider-text" id="sliderText2">1</span>) {<br>   System.out.println("Hello! " + i);<br>}</code></pre>
+                                <h6>Output</h6>
+                                <p class="card-text output-text" id="outputText2">Hello! 0</p>
+                            </div>
+                            <div class="col">
+                                <input type="range" class="form-range" min="1" max="5" value="1" id="rangeInput2">
+                                <span>i &lt; </span>
+                                <span class="result slider-text" id="result2">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <!-- <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script> -->
+    <script>
+        // Java and Python code examples
+        const examples = {
+            java: {
+                for: `for (int i = 0; i &lt; <span class="slider-text" id="sliderText1">1</span>; i++) {<br>   System.out.println("Hello! " + i);<br>}`,
+                while: `int i = 0;<br>while (i &lt; <span class="slider-text" id="sliderText2">1</span>) {<br>   System.out.println("Hello! " + i);<br>}`
+            },
+            python: {
+                for: `for i in range(<span class="slider-text" id="sliderText1">1</span>):<br>    print("Hello!", i)`,
+                while: `i = 0<br>while i &lt; <span class="slider-text" id="sliderText2">1</span>:<br>    print("Hello!", i)<br>    i += 1`
+            }
+        };
+
+        // Function to update examples based on the selected language
+        function updateExamples(language) {
+            document.getElementById('forExample').innerHTML = examples[language].for;
+            document.getElementById('whileExample').innerHTML = examples[language].while;
+
+            // Re-attach event listeners to the updated sliders
+            document.getElementById('rangeInput1').addEventListener('input', function() {
+                const sliderText1 = document.getElementById('sliderText1');
+                const outputText1 = document.getElementById('outputText1');
+                sliderText1.textContent = this.value;
+                updateOutput(this, outputText1);
+            });
+
+            document.getElementById('rangeInput2').addEventListener('input', function() {
+                const sliderText2 = document.getElementById('sliderText2');
+                const outputText2 = document.getElementById('outputText2');
+                sliderText2.textContent = this.value;
+                updateOutput(this, outputText2);
+            });
+
+            // Update the initial output for both sliders
+            const rangeInput1 = document.getElementById('rangeInput1');
+            const rangeInput2 = document.getElementById('rangeInput2');
+            updateOutput(rangeInput1, document.getElementById('outputText1'));
+            updateOutput(rangeInput2, document.getElementById('outputText2'));
+        }
+
+        // Function to update output text based on slider value
+        function updateOutput(slider, outputText) {
+            let output = '';
+            for (let i = 0; i < slider.value; i++) {
+                output += `Hello! ${i}<br>`;
+            }
+            outputText.innerHTML = output;
+        }
+
+        // Event listeners for language selection buttons
+        document.getElementById('loopsJavaBtn').addEventListener('click', function() {
+            document.getElementById('loopsJavaBtn').classList.add('active');
+            document.getElementById('loopsPythonBtn').classList.remove('active');
+            updateExamples('java');
+        });
+
+        document.getElementById('loopsPythonBtn').addEventListener('click', function() {
+            document.getElementById('loopsPythonBtn').classList.add('active');
+            document.getElementById('loopsJavaBtn').classList.remove('active');
+            updateExamples('python');
+        });
+
+        // Initial setup
+        updateExamples('java');
+
+    </script>
+
+   
+</body>
+
+
+</html>

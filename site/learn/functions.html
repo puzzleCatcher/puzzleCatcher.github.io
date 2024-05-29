@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Jacquard+12+Charted&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000&display=swap');
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Functions</title>
+</head>
+
+<body>
+
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#header').load('../header.html');
+            $('#footer').load('../footer.html');
+        });
+    </script>
+    <div id="header"></div>
+    <div class="container mt-5">
+        <h1 class="mb-4">Functions</h1>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="btn-group btn-group-toggle btn-block mb-3" role="group" aria-label="Select language">
+                    <button type="button" class="btn btn-outline-primary active" id="javaBtn">Java</button>
+                    <button type="button" class="btn btn-outline-primary" id="pythonBtn">Python</button>
+                </div>
+
+                <p>Functions are blocks of code that perform a specific task. They can take inputs, called parameters, and return outputs.</p>
+
+                <div id="javaFunctions">
+                    <h5 class="mt-5">Java Functions</h5>
+                    <p>Here is an example of a function that adds two numbers in Java:</p>
+
+                    <div class="card mt-0 mb-3" style="min-height: 350px; padding: 20px;">
+                        <div class="card-body d-flex justify-content-between">
+                            <div style="flex: 1;">
+                                <h5 class="card-title">Java Example</h5>
+                                <pre><code>public class Main {<br>    public static void main(String[] args) {<br>        int result = add(<span id="javaA">3</span>, <span id="javaB">5</span>);<br>        System.out.println("The sum is: " + result);<br>    }<br><br>    public static int add(int a, int b) {<br>        return a + b;<br>    }<br>}</code></pre>
+                                <h6>Output</h6>
+                                <p class="card-text" id="javaOutput"><code>The sum is: 8</code></p>
+                            </div>
+                            <div style="flex: 0 0 150px;">
+                                <label for="rangeInputAJava" class="form-label">Value of a:</label>
+                                <input type="range" class="form-range" min="1" max="5" value="3" id="rangeInputAJava">
+                                <span id="valueAJava">3</span>
+
+                                <div class="mt-3">
+                                    <label for="rangeInputBJava" class="form-label mt-3">Value of b:</label>
+                                    <input type="range" class="form-range" min="1" max="5" value="5" id="rangeInputBJava">
+                                    <span id="valueBJava">5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pythonFunctions" style="display:none;">
+                    <h5 class="mt-5">Python Functions</h5>
+                    <p>Here is an example of a function that adds two numbers in Python:</p>
+
+                    <div class="card mt-0 mb-3" style="min-height: 350px; padding: 20px;">
+                        <div class="card-body d-flex justify-content-between">
+                            <div style="flex: 1;">
+                                <h5 class="card-title">Python Example</h5>
+                                <pre><code>def add(a, b):<br>    return a + b<br><br>result = add(<span id="pythonA">3</span>, <span id="pythonB">5</span>)<br>print("The sum is:", result)</code></pre>
+                                <h6>Output</h6>
+                                <p class="card-text" id="pythonOutput"><code>The sum is: 8</code></p>
+                            </div>
+                            <div style="flex: 0 0 150px;">
+                                <label for="rangeInputAPython" class="form-label">Value of a:</label>
+                                <input type="range" class="form-range" min="1" max="5" value="3" id="rangeInputAPython">
+                                <span id="valueAPython">3</span>
+
+                                <label for="rangeInputBPython" class="form-label mt-3">Value of b:</label>
+                                <input type="range" class="form-range" min="1" max="5" value="5" id="rangeInputBPython">
+                                <span id="valueBPython">5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="mt-4">Functions can take multiple parameters, return different types of values, and perform complex operations. They help in organizing code and making it reusable.</p>
+            </div>
+        </div>
+    </div>
+    <div id="footer"></div>
+
+    <script>
+        const javaFunctions = document.getElementById("javaFunctions");
+        const pythonFunctions = document.getElementById("pythonFunctions");
+        const valueAJava = document.getElementById("valueAJava");
+        const valueBJava = document.getElementById("valueBJava");
+        const rangeInputAJava = document.getElementById("rangeInputAJava");
+        const rangeInputBJava = document.getElementById("rangeInputBJava");
+        const valueAPython = document.getElementById("valueAPython");
+        const valueBPython = document.getElementById("valueBPython");
+        const rangeInputAPython = document.getElementById("rangeInputAPython");
+        const rangeInputBPython = document.getElementById("rangeInputBPython");
+
+        document.getElementById("javaBtn").addEventListener("click", function () {
+            javaFunctions.style.display = "block";
+            pythonFunctions.style.display = "none";
+            document.getElementById("javaBtn").classList.add("active");
+            document.getElementById("pythonBtn").classList.remove("active");
+            updateOutput();
+        });
+
+        document.getElementById("pythonBtn").addEventListener("click", function () {
+            javaFunctions.style.display = "none";
+            pythonFunctions.style.display = "block";
+            document.getElementById("javaBtn").classList.remove("active");
+            document.getElementById("pythonBtn").classList.add("active");
+            updateOutput();
+        });
+
+        rangeInputAJava.addEventListener('input', function () {
+            valueAJava.textContent = this.value;
+            updateOutput();
+        });
+
+        rangeInputBJava.addEventListener('input', function () {
+            valueBJava.textContent = this.value;
+            updateOutput();
+        });
+
+        rangeInputAPython.addEventListener('input', function () {
+            valueAPython.textContent = this.value;
+            updateOutput();
+        });
+
+        rangeInputBPython.addEventListener('input', function () {
+            valueBPython.textContent = this.value;
+            updateOutput();
+        });
+
+        function updateOutput() {
+            const aJava = rangeInputAJava.value;
+            const bJava = rangeInputBJava.value;
+            const aPython = rangeInputAPython.value;
+            const bPython = rangeInputBPython.value;
+
+            // Update Java Example
+            document.getElementById('javaA').textContent = aJava;
+            document.getElementById('javaB').textContent = bJava;
+            document.getElementById('javaOutput').innerHTML = `<code>The sum is: ${parseInt(aJava) + parseInt(bJava)}</code>`;
+
+            // Update Python Example
+            document.getElementById('pythonA').textContent = aPython;
+            document.getElementById('pythonB').textContent = bPython;
+            document.getElementById('pythonOutput').innerHTML = `<code>The sum is: ${parseInt(aPython) + parseInt(bPython)}</code>`;
+        }
+
+        // Initial output setup
+        updateOutput();
+    </script>
+</body>
+
+</html>

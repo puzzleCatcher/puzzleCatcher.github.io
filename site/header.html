@@ -10,26 +10,45 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 
-    
-
     <title>Header</title>
-
-    
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light navbar-right">
-        <!-- <a class="navbar-brand" href="#">Navbar</a> -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav ml-auto">
-            <a class="nav-item nav-link active" href="../index.html">Home<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="../learn.html">Learn</a>
-            <a class="nav-item nav-link" href="#">Quizzes</a>
-            <a class="nav-item nav-link" href="#">About</a>
-          </div>
+            <div class="navbar-nav mr-auto"> <!-- Changed ml-auto to mr-auto -->
+                <span class="nav-item nav-link">Connecting Through Code</span>
+            </div>
+            <div class="navbar-nav ml-auto">
+                <a id="nav-home" class="nav-item nav-link" href="../index.html">Home<span class="sr-only">(current)</span></a>
+                <a id="nav-learn" class="nav-item nav-link" href="../learn.html">Learn</a>
+                <a id="nav-quizzes" class="nav-item nav-link" href="../quizzes.html">Quizzes</a>
+                <a id="nav-about" class="nav-item nav-link" href="#">About</a>
+            </div>
         </div>
     </nav>
+    
+    
+
+    <script>
+        // JavaScript to dynamically add 'active' class
+        const path = window.location.pathname;
+        const navLinks = {
+            '/index.html': 'nav-home',
+            '/learn': 'nav-learn',
+            '/quizzes': 'nav-quizzes',
+            '/about': 'nav-about'
+        };
+
+        for (const [key, value] of Object.entries(navLinks)) {
+            if (path.startsWith(key)) {
+                document.getElementById(value).classList.add('active');
+            } else {
+                document.getElementById(value).classList.remove('active');
+            }
+        }
+    </script>
 </body>
 </html>

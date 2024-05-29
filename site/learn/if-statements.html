@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Jacquard+12+Charted&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>If Statements</title>
+</head>
+
+<body>
+
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#header').load('../header.html');
+            $('#footer').load('../footer.html');
+        });
+    </script>
+    <div id="header"></div>
+    <div class="container mt-5">
+        <h1 class="mb-4">If Statements</h1>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="btn-group btn-group-toggle btn-block mb-3" role="group" aria-label="Select language">
+                    <button type="button" class="btn btn-outline-primary active" id="javaBtn">Java</button>
+                    <button type="button" class="btn btn-outline-primary" id="pythonBtn">Python</button>
+                </div>
+
+                <p>If statements are used to execute a block of code only if a specified condition is true.</p>
+
+                <div id="javaIfStatements">
+                    <h5 class="mt-5">Java If Statements</h5>
+                    <p>Here is an example of an if statement in Java:</p>
+
+                    <div class="card mt-0 mb-3" style="min-height: 350px; padding: 20px;">
+                        <div class="card-body d-flex justify-content-between">
+                            <div style="flex: 1;">
+                                <h5 class="card-title">Java Example</h5>
+                                <pre><code>public class Main {<br>    public static void main(String[] args) {<br>        int number = <span id="javaSimpleNumber">10</span>;<br>        if (number > 0) {<br>            System.out.println("The number is positive.");<br>        } else {<br>            System.out.println("The number is not positive.");<br>        }<br>    }<br>}</code></pre>
+                                <h6>Output</h6>
+                                <p class="card-text" id="javaSimpleOutput"><code>The number is positive.</code></p>
+                            </div>
+                            <div style="flex: 0 0 150px;">
+                                <label for="rangeInputJavaSimple" class="form-label">Number:</label>
+                                <input type="range" class="form-range" min="-10" max="10" value="10" id="rangeInputJavaSimple">
+                                <span id="javaSimpleValue">10</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-5">Java Else-If Statements</h5>
+                    <p>Here is an example of using if, else if, and else statements in Java:</p>
+
+                    <div class="card mt-0 mb-3" style="min-height: 350px; padding: 20px;">
+                        <div class="card-body d-flex justify-content-between">
+                            <div style="flex: 1;">
+                                <h5 class="card-title">Java Example</h5>
+                                <pre><code>public class Main {<br>    public static void main(String[] args) {<br>        int number = <span id="javaComplexNumber">10</span>;<br>        if (number > 0) {<br>            System.out.println("The number is positive.");<br>        } else if (number < 0) {<br>            System.out.println("The number is negative.");<br>        } else {<br>            System.out.println("The number is zero.");<br>        }<br>    }<br>}</code></pre>
+                                <h6>Output</h6>
+                                <p class="card-text" id="javaComplexOutput"><code>The number is positive.</code></p>
+                            </div>
+                            <div style="flex: 0 0 150px;">
+                                <label for="rangeInputJavaComplex" class="form-label">Number:</label>
+                                <input type="range" class="form-range" min="-10" max="10" value="10" id="rangeInputJavaComplex">
+                                <span id="javaComplexValue">
+                                    <label for="rangeInputJavaComplex" class="form-label">Number:</label>
+                                    <input type="range" class="form-range" min="-10" max="10" value="10" id="rangeInputJavaComplex">
+                                    <span id="javaComplexValue">10</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div id="pythonIfStatements" style="display:none;">
+                        <h5 class="mt-5">Python If Statements</h5>
+                        <p>Here is an example of an if statement in Python:</p>
+    
+                        <div class="card mt-0 mb-3" style="min-height: 350px; padding: 20px;">
+                            <div class="card-body d-flex justify-content-between">
+                                <div style="flex: 1;">
+                                    <h5 class="card-title">Python Example</h5>
+                                    <pre><code>number = <span id="pythonSimpleNumber">10</span><br>if number > 0:<br>    print("The number is positive.")<br>else:<br>    print("The number is not positive.")</code></pre>
+                                    <h6>Output</h6>
+                                    <p class="card-text" id="pythonSimpleOutput"><code>The number is positive.</code></p>
+                                </div>
+                                <div style="flex: 0 0 150px;">
+                                    <label for="rangeInputPythonSimple" class="form-label">Number:</label>
+                                    <input type="range" class="form-range" min="-10" max="10" value="10" id="rangeInputPythonSimple">
+                                    <span id="pythonSimpleValue">10</span>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <h5 class="mt-5">Python Else-If Statements</h5>
+                        <p>Here is an example of using if, elif, and else statements in Python:</p>
+    
+                        <div class="card mt-0 mb-3" style="min-height: 350px; padding: 20px;">
+                            <div class="card-body d-flex justify-content-between">
+                                <div style="flex: 1;">
+                                    <h5 class="card-title">Python Example</h5>
+                                    <pre><code>number = <span id="pythonComplexNumber">10</span><br>if number > 0:<br>    print("The number is positive.")<br>elif number < 0:<br>    print("The number is negative.")<br>else:<br>    print("The number is zero.")</code></pre>
+                                    <h6>Output</h6>
+                                    <p class="card-text" id="pythonComplexOutput"><code>The number is positive.</code></p>
+                                </div>
+                                <div style="flex: 0 0 150px;">
+                                    <label for="rangeInputPythonComplex" class="form-label">Number:</label>
+                                    <input type="range" class="form-range" min="-10" max="10" value="10" id="rangeInputPythonComplex">
+                                    <span id="pythonComplexValue">10</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer"></div>
+    
+        <script>
+            const javaIfStatements = document.getElementById("javaIfStatements");
+            const pythonIfStatements = document.getElementById("pythonIfStatements");
+            const rangeInputJavaSimple = document.getElementById("rangeInputJavaSimple");
+            const rangeInputPythonSimple = document.getElementById("rangeInputPythonSimple");
+            const rangeInputJavaComplex = document.getElementById("rangeInputJavaComplex");
+            const rangeInputPythonComplex = document.getElementById("rangeInputPythonComplex");
+        
+            document.getElementById("javaBtn").addEventListener("click", function () {
+                javaIfStatements.style.display = "block";
+                pythonIfStatements.style.display = "none";
+                document.getElementById("javaBtn").classList.add("active");
+                document.getElementById("pythonBtn").classList.remove("active");
+                updateOutput();
+            });
+        
+            document.getElementById("pythonBtn").addEventListener("click", function () {
+                javaIfStatements.style.display = "none";
+                pythonIfStatements.style.display = "block";
+                document.getElementById("javaBtn").classList.remove("active");
+                document.getElementById("pythonBtn").classList.add("active");
+                updateOutput();
+            });
+        
+            rangeInputJavaSimple.addEventListener('input', updateOutput);
+            rangeInputPythonSimple.addEventListener('input', updateOutput);
+            rangeInputJavaComplex.addEventListener('input', updateOutput);
+            rangeInputPythonComplex.addEventListener('input', updateOutput);
+        
+            function updateOutput() {
+                const javaSimpleNumber = rangeInputJavaSimple.value;
+                const pythonSimpleNumber = rangeInputPythonSimple.value;
+                const javaComplexNumber = rangeInputJavaComplex.value;
+                const pythonComplexNumber = rangeInputPythonComplex.value;
+        
+                // Update Java Simple Example
+                document.getElementById('javaSimpleValue').textContent = javaSimpleNumber;
+                document.getElementById('javaSimpleOutput').textContent = javaSimpleNumber > 0 ? 'The number is positive.' : 'The number is not positive.';
+        
+                // Update Python Simple Example
+                document.getElementById('pythonSimpleValue').textContent = pythonSimpleNumber;
+                document.getElementById('pythonSimpleOutput').textContent = pythonSimpleNumber > 0 ? 'The number is positive.' : 'The number is not positive.';
+        
+                // Update Java Complex Example
+                document.getElementById('javaComplexValue').textContent = javaComplexNumber;
+                document.getElementById('javaComplexOutput').textContent = javaComplexNumber > 0 ? 'The number is positive.' : javaComplexNumber < 0 ? 'The number is negative.' : 'The number is zero.';
+        
+                // Update Python Complex Example
+                document.getElementById('pythonComplexValue').textContent = pythonComplexNumber;
+                document.getElementById('pythonComplexOutput').textContent = pythonComplexNumber > 0 ? 'The number is positive.' : pythonComplexNumber < 0 ? 'The number is negative.' : 'The number is zero.';
+            }
+        
+            // Initial output setup
+            updateOutput();
+        </script>
+        
+    </body>
+    
+    </html>
+    

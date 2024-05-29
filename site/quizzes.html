@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Jacquard+12+Charted&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Quizzes</title>
+</head>
+<body>
+
+    <div id="header"></div>
+
+    <div id="quiz-boxes" class="container">
+        <h1>Quizzes</h1>
+      
+        <!-- First set of quiz boxes -->
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Variables Quiz</h5>
+                <p class="card-text">Test your knowledge on variables!</p>
+                <a href="quiz/variables-quiz.html" class="btn btn-primary">Start</a>
+              </div>
+            </div>
+          </div>
+          <!-- Add more quiz boxes here -->
+        </div>
+      
+        <!-- Second set of quiz boxes -->
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Loops Quiz</h5>
+                <p class="card-text">Test your knowledge on loops!</p>
+                <a href="quiz/loops-quiz.html" class="btn btn-primary">Start</a>
+              </div>
+            </div>
+          </div>
+          <!-- Add more quiz boxes here -->
+        </div>
+      
+        <!-- Third set of quiz boxes -->
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Functions Quiz</h5>
+                <p class="card-text">Test your knowledge on functions!</p>
+                <a href="quiz/functions-quiz.html" class="btn btn-primary">Start</a>
+              </div>
+            </div>
+          </div>
+          <!-- Add more quiz boxes here -->
+        </div>
+    </div>
+
+    <!-- Add your footer and script tags here -->
+    <div id="footer"></div>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(function() {
+          $('#header').load('header.html');
+          $('#footer').load('footer.html');
+        });
+    </script>
+</body>
+</html>

@@ -116,25 +116,29 @@
             document.getElementById('rangeInput1').addEventListener('input', function() {
                 const sliderText1 = document.getElementById('sliderText1');
                 const outputText1 = document.getElementById('outputText1');
+                const result1 = document.getElementById('result1');
                 sliderText1.textContent = this.value;
+                result1.textContent = this.value;
                 updateOutput(this, outputText1);
             });
 
             document.getElementById('rangeInput2').addEventListener('input', function() {
                 const sliderText2 = document.getElementById('sliderText2');
                 const outputText2 = document.getElementById('outputText2');
+                const result2 = document.getElementById('result2');
                 sliderText2.textContent = this.value;
+                result2.textContent = this.value;
                 updateOutput(this, outputText2);
             });
 
-            // Update the initial output for both sliders
+            
             const rangeInput1 = document.getElementById('rangeInput1');
             const rangeInput2 = document.getElementById('rangeInput2');
             updateOutput(rangeInput1, document.getElementById('outputText1'));
             updateOutput(rangeInput2, document.getElementById('outputText2'));
         }
 
-        // Function to update output text based on slider value
+  
         function updateOutput(slider, outputText) {
             let output = '';
             for (let i = 0; i < slider.value; i++) {

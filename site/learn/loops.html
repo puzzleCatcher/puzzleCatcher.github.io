@@ -101,12 +101,18 @@
             }
         };
 
-        // Function to update examples based on the selected language
+        
         function updateExamples(language) {
             document.getElementById('forExample').innerHTML = examples[language].for;
             document.getElementById('whileExample').innerHTML = examples[language].while;
+            
+       
+            const cardTitles = document.querySelectorAll('.card-title');
+            cardTitles.forEach(title => {
+                title.textContent = language === 'java' ? 'Java Example' : 'Python Example';
+            });
 
-            // Re-attach event listeners to the updated sliders
+        
             document.getElementById('rangeInput1').addEventListener('input', function() {
                 const sliderText1 = document.getElementById('sliderText1');
                 const outputText1 = document.getElementById('outputText1');
@@ -137,7 +143,7 @@
             outputText.innerHTML = output;
         }
 
-        // Event listeners for language selection buttons
+ 
         document.getElementById('loopsJavaBtn').addEventListener('click', function() {
             document.getElementById('loopsJavaBtn').classList.add('active');
             document.getElementById('loopsPythonBtn').classList.remove('active');
